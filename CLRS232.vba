@@ -1226,10 +1226,6 @@ Property Get InputBufferSize() As Long
     InputBufferSize = clInBufferSize
 End Property
 
-Public Sub SerialConnectRetry()
-    CommClose clComport
-End Sub
-
 Private Sub Class_Initialize()
 
     clBaud = 115200
