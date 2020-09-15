@@ -3,6 +3,7 @@ Option Explicit
     Dim btnRStart, btnRStop, btnRFlag As Boolean
     Dim btnStartCom, btnCloseCom As Boolean
     Dim CLR As New CLRS232
+    Dim status As Integer
     
     
     Public Function WriteCom() As String
@@ -23,8 +24,15 @@ Option Explicit
         'CLR.FlushComms
         
         Debug.Print ("Write: ")
-        CLR.WriteComm (startString & writeString)
-        Debug.Print (startString & writeString)
+        CLR.WriteComm (startString & writeString & vbCrLf)
+        Debug.Print (startString & writeString & vbCrLf)
+        
+        'thanks to this status and error msg below it is showing that nothing was every sent!
+        Debug.Print ("status: " & CLR.status)
+        Debug.Print ("errorMsg: " & CLR.ErrorMsg)
+        Debug.Print ("LineDTR: " & CLR.LineDTR)
+        Debug.Print ("LineRTS: " & CLR.LineRTS)
+        Debug.Print ("data: " & CLR.Data)
         
     End Sub
 
@@ -38,6 +46,14 @@ Option Explicit
         CLR.ReadComm
         'DoEvents
         
+        Debug.Print ("status: " & CLR.status)
+        Debug.Print ("errorMsg: " & CLR.ErrorMsg)
+        Debug.Print ("LineDTR: " & CLR.LineDTR)
+        Debug.Print ("LineRTS: " & CLR.LineRTS)
+        Debug.Print ("data: " & CLR.Data)
+        
+        Debug.Print ("byte1: " & byte1)
+        
         If byte1 = Chr(13) Then
             Sheets("Sheet1").Range("K17").Value = chars
             Debug.Print ("chars: ")
@@ -48,6 +64,12 @@ Option Explicit
             Debug.Print ("else - chars: ")
             Debug.Print (chars)
         End If
+        
+        Debug.Print ("status: " & CLR.status)
+        Debug.Print ("errorMsg: " & CLR.ErrorMsg)
+        Debug.Print ("LineDTR: " & CLR.LineDTR)
+        Debug.Print ("LineRTS: " & CLR.LineRTS)
+        Debug.Print ("data: " & CLR.Data)
         
         If Not CLR.Data = vbNullString Then
             Sheets("Sheet1").Range("K17") = CLR.Data
@@ -63,6 +85,12 @@ Option Explicit
             Debug.Print ("no null string: ")
             Debug.Print (CLR.Data)
         End If
+        
+        Debug.Print ("status: " & CLR.status)
+        Debug.Print ("errorMsg: " & CLR.ErrorMsg)
+        Debug.Print ("LineDTR: " & CLR.LineDTR)
+        Debug.Print ("LineRTS: " & CLR.LineRTS)
+        Debug.Print ("data: " & CLR.Data)
         
     End Sub
     
@@ -82,6 +110,12 @@ Option Explicit
             lngStopBits = .Range("P6").Value
         End With
         
+        Debug.Print ("status: " & CLR.status)
+        Debug.Print ("errorMsg: " & CLR.ErrorMsg)
+        Debug.Print ("LineDTR: " & CLR.LineDTR)
+        Debug.Print ("LineRTS: " & CLR.LineRTS)
+        Debug.Print ("data: " & CLR.Data)
+        
         With CLR
             .COMport = lngComPort
             .BaudRate = lngBaudRate
@@ -92,12 +126,23 @@ Option Explicit
             .OpenComms
         End With
         
-        Sheets("Sheet1").Range("L7").Value = "Open"
+        'The status is 5 and errorMsg is 5 since port is already open! So that is good to know it works
+        If CLR.status <> 5 Then
+            Sheets("Sheet1").Range("L7").Value = "Open"
+        Else
+            MsgBox ("Port Already Open, can't Open right now!")
+        End If
         
     End Sub
     
     Sub DisconnectFromSerialPortBtn()
         CLR.CloseComms
+        
+        Debug.Print ("status: " & CLR.status)
+        Debug.Print ("errorMsg: " & CLR.ErrorMsg)
+        Debug.Print ("LineDTR: " & CLR.LineDTR)
+        Debug.Print ("LineRTS: " & CLR.LineRTS)
+        Debug.Print ("data: " & CLR.Data)
         
         btnCloseCom = True
         btnStartCom = False
