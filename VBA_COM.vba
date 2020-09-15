@@ -95,8 +95,8 @@ Option Explicit
     End Sub
 
     Sub ReConnectToSerialPort()
-        Dim data, data2 As String
-        Dim dataArray, dataArray2
+        Dim data, data2, data3, item, value As String
+        Dim dataArray, dataArray2, dataArray3
         'CLR.SerialConnectRetry
         data = "#01:VX=0" & vbCrLf
         Debug.Print ("data: " & data)
@@ -106,7 +106,12 @@ Option Explicit
         'removes the vbCrLf to use it, now just to split off at the ':' portion
         dataArray2 = Split(dataArray(0), ":")
         Debug.Print ("data2: " & dataArray2(1))
-    'works, now just have to remove some variables to where I would like it instead now
+        data3 = dataArray(1)
+        dataArray3 = Split(dataArray2(1), "=")
+        item = dataArray3(0)
+        value = dataArray3(1)
+        Debug.Print ("item: " & item)
+        Debug.Print ("value: " & value)
     End Sub
     
     Sub ConnectToSerialPortBtn()
